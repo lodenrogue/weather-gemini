@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-const URL = 'https://wttr.in'
+const BASE_URL = 'https://wttr.in'
 
 class Weather {
 
@@ -8,8 +8,8 @@ class Weather {
         this.location = location;
     }
 
-    async forecast() {
-        const data = await this.getData(this.location);
+    async forecast(isMetric = false) {
+        const data = await this.getData(this.location, isMetric);
         const formatted = this.formatData(data);
         return formatted;
     }
@@ -27,9 +27,11 @@ class Weather {
         return line.startsWith('Follow') ? '' : line;
    }
 
-    async getData(location) {
+    async getData(location, isMetric) {
         return new Promise((resolve, reject) => {
-            axios.get(`${URL}/${location}?AT`).then(res => resolve(res.data));
+            let url = `${BASE_URL}/${location}?AT`;
+            url = isMetric ? `${url}m` : url;
+            axios.get(url).then(res => resolve(res.data));
         });
     }
 }

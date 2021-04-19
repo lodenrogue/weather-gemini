@@ -19,6 +19,14 @@ app.on('/weather/:location', async (req, res) => {
     res.data(weather, mimeType='text/gemini');
 });
 
+app.on('/weather/:location/metric', async(req, res) => {
+    const location = req.params.location;
+    console.log('Received request for', location);
+
+    const weather = await new Weather(location).forecast(true);
+    res.data(weather, mimeType='text/gemini');
+});
+
 app.listen(() => {
 	console.log("Listening...");
 });
